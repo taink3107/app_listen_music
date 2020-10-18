@@ -1,4 +1,4 @@
-package com.example.app_music.ui.gallery;
+package com.example.app_music.ui.playlist;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;

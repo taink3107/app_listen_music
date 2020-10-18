@@ -1,4 +1,4 @@
-package com.example.app_music.ui.slideshow;
+package com.example.app_music.ui.uploadmusic;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;

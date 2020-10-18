@@ -4,32 +4,41 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
+
 
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
-import androidx.lifecycle.Observer;
-import androidx.lifecycle.ViewModelProviders;
+import androidx.viewpager.widget.ViewPager;
 
 import com.example.app_music.R;
+import com.example.app_music.adapter.MainViewPageAdapter;
+import com.example.app_music.ui.home.homecontent.HomeContentFragment;
+import com.example.app_music.ui.home.search.SearchFragment;
+import com.google.android.material.tabs.TabLayout;
 
 public class HomeFragment extends Fragment {
 
     private HomeViewModel homeViewModel;
+    private TabLayout tabLayout;
+    private ViewPager viewPager;
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
-        homeViewModel =
-                ViewModelProviders.of(this).get(HomeViewModel.class);
         View root = inflater.inflate(R.layout.fragment_home, container, false);
-        final TextView textView = root.findViewById(R.id.text_home);
-        homeViewModel.getText().observe(getViewLifecycleOwner(), new Observer<String>() {
-            @Override
-            public void onChanged(@Nullable String s) {
-                textView.setText(s);
-            }
-        });
+        tabLayout = root.findViewById(R.id.myTabLayout);
+        viewPager = root.findViewById(R.id.myViewPager);
+        MainViewPageAdapter viewPageAdapter = new MainViewPageAdapter(getFragmentManager());
+        init();
         return root;
+    }
+
+    private void init() {
+        MainViewPageAdapter viewPageAdapter = new MainViewPageAdapter(getFragmentManager());
+        viewPageAdapter.addFrament(new HomeContentFragment(), "Home");
+        viewPageAdapter.addFrament(new SearchFragment(), "Search");
+        viewPager.setAdapter(viewPageAdapter);
+        tabLayout.setupWithViewPager(viewPager);
+        tabLayout.getTabAt(0).setIcon(R.drawable.ic_home);
+        tabLayout.getTabAt(1).setIcon(R.drawable.iconsearch);
     }
 }
