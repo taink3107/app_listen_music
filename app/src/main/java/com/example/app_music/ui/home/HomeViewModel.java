@@ -1,31 +1,31 @@
 package com.example.app_music.ui.home;
 
-import android.widget.TableLayout;
-
 import androidx.fragment.app.FragmentManager;
-import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
-import androidx.viewpager.widget.ViewPager;
 
 import com.example.app_music.adapter.MainViewPageAdapter;
+import com.example.app_music.ui.home.homecontent.HomeContentFragment;
+import com.example.app_music.ui.home.search.SearchFragment;
 
 public class HomeViewModel extends ViewModel {
 
 
-    private MutableLiveData<String> mText;
+    private MutableLiveData<MainViewPageAdapter> dataAdapter;
+
+    public MutableLiveData<MainViewPageAdapter> getDataAdapter() {
+        return dataAdapter;
+    }
 
     public HomeViewModel() {
-        mText = new MutableLiveData<>();
-        mText.setValue("This is home fragment");
+        dataAdapter = new MutableLiveData<>();
     }
 
-    public LiveData<String> getText() {
-        return mText;
+
+    public void setDataAdapter(FragmentManager manager) {
+        MainViewPageAdapter adapter = new MainViewPageAdapter(manager);
+        adapter.addFrament(new HomeContentFragment(), "Home");
+        adapter.addFrament(new SearchFragment(), "Search");
+        dataAdapter.setValue(adapter);
     }
-    /*private void init(){
-        FragmentManager manager = new FragmentManager() {
-        }
-        MainViewPageAdapter viewPageAdapter = new MainViewPageAdapter(getFragmentManager())
-    }*/
 }

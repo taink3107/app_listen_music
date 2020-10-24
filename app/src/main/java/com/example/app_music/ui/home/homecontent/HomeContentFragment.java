@@ -25,6 +25,7 @@ public class HomeContentFragment extends Fragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
+
         return inflater.inflate(R.layout.home_content_fragment, container, false);
     }
 
@@ -33,6 +34,7 @@ public class HomeContentFragment extends Fragment {
         super.onActivityCreated(savedInstanceState);
         mViewModel = ViewModelProviders.of(this).get(HomeContentViewModel.class);
         // TODO: Use the ViewModel
+
     }
 
 }

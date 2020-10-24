@@ -1,4 +1,4 @@
-package com.example.app_music.ui.uploadmusic;
+package com.example.app_music.ui.playlist;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -14,17 +14,17 @@ import androidx.lifecycle.ViewModelProviders;
 
 import com.example.app_music.R;
 
-public class SlideshowFragment extends Fragment {
+public class PlayListFragment extends Fragment {
 
-    private SlideshowViewModel slideshowViewModel;
+    private PlayListViewModel playListViewModel;
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
-        slideshowViewModel =
-                ViewModelProviders.of(this).get(SlideshowViewModel.class);
-        View root = inflater.inflate(R.layout.fragment_slideshow, container, false);
-        final TextView textView = root.findViewById(R.id.text_slideshow);
-        slideshowViewModel.getText().observe(getViewLifecycleOwner(), new Observer<String>() {
+        playListViewModel =
+                ViewModelProviders.of(this).get(PlayListViewModel.class);
+        View root = inflater.inflate(R.layout.fragment_gallery, container, false);
+        final TextView textView = root.findViewById(R.id.text_gallery);
+        playListViewModel.getText().observe(getViewLifecycleOwner(), new Observer<String>() {
             @Override
             public void onChanged(@Nullable String s) {
                 textView.setText(s);
