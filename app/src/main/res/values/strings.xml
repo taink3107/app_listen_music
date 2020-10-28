@@ -9,8 +9,10 @@
     <string name="action_settings">Settings</string>
 
     <string name="menu_home">Home</string>
-    <string name="menu_gallery">My play list</string>
+    <string name="menu_gallery">Rating favorite song</string>
     <string name="menu_slideshow">Upload Music</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="upload_music">Click to select music</string>
+    <string name="next">NEXT</string>
 </resources>

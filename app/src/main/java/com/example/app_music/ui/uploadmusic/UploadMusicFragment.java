@@ -4,32 +4,41 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
-import androidx.lifecycle.Observer;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 import androidx.lifecycle.ViewModelProviders;
+import androidx.viewpager.widget.ViewPager;
 
 import com.example.app_music.R;
+import com.example.app_music.adapter.MainViewPageAdapter;
+import com.example.app_music.domain.Song;
+import com.example.app_music.ui.uploadmusic.step1.Step1;
+import com.example.app_music.ui.uploadmusic.step2.Step2;
+import com.example.app_music.ui.uploadmusic.step3.Step3;
+import com.google.android.material.tabs.TabLayout;
 
 public class UploadMusicFragment extends Fragment {
 
     private UploadMusicModel uploadMusicModel;
+
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
         uploadMusicModel =
                 ViewModelProviders.of(this).get(UploadMusicModel.class);
         View root = inflater.inflate(R.layout.fragment_slideshow, container, false);
-        final TextView textView = root.findViewById(R.id.text_slideshow);
-        uploadMusicModel.getText().observe(getViewLifecycleOwner(), new Observer<String>() {
-            @Override
-            public void onChanged(@Nullable String s) {
-                textView.setText(s);
-            }
-        });
+        init();
         return root;
     }
+
+    public void init() {
+        FragmentManager manager = getFragmentManager();
+        FragmentTransaction transaction = manager.beginTransaction();
+        transaction.replace(R.id.frame_container, new Step1());
+        transaction.commit();
+    }
+
 }
