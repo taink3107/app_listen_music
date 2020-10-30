@@ -7,6 +7,7 @@ import androidx.lifecycle.ViewModelProviders;
 
 import android.content.Context;
 import android.content.Intent;
+import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
 
@@ -14,6 +15,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
+import android.provider.OpenableColumns;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -26,6 +28,8 @@ import android.widget.Toast;
 import com.example.app_music.R;
 import com.example.app_music.domain.Song;
 import com.example.app_music.ui.uploadmusic.step2.Step2;
+
+import java.util.Arrays;
 
 public class Step1 extends Fragment {
 
@@ -74,8 +78,8 @@ public class Step1 extends Fragment {
     public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == PICK_MUSIC_FILE_REQUEST && resultCode == AppCompatActivity.RESULT_OK && data != null && data.getData() != null) {
-            Log.i("DCM", data.getData().getLastPathSegment());
             uriData = data.getData();
+
         } else {
         }
     }
@@ -83,14 +87,14 @@ public class Step1 extends Fragment {
     public void sendUri() {
         if (uriData != null) {
             Song song = new Song();
+            song.processUri(getFileName(uriData));
             song.setMp3_URI(uriData.toString());
             Bundle bundle = new Bundle();
-            bundle.putString("uri", uriData.toString());
+            bundle.putSerializable("new_song", song);
             FragmentManager manager = getActivity().getSupportFragmentManager();
             FragmentTransaction transaction = manager.beginTransaction();
             Step2 step2 = new Step2();
             step2.setArguments(bundle);
-
             transaction.replace(R.id.frame_container, step2);
             transaction.commit();
         } else {
@@ -99,6 +103,28 @@ public class Step1 extends Fragment {
 
     }
 
+
+    public String getFileName(Uri uri) {
+        String result = null;
+        if (uri.getScheme().equals("content")) {
+            Cursor cursor = getActivity().getContentResolver().query(uri, null, null, null, null);
+            try {
+                if (cursor != null && cursor.moveToFirst()) {
+                    result = cursor.getString(cursor.getColumnIndex(OpenableColumns.DISPLAY_NAME));
+                }
+            } finally {
+                cursor.close();
+            }
+        }
+        if (result == null) {
+            result = uri.getPath();
+            int cut = result.lastIndexOf('/');
+            if (cut != -1) {
+                result = result.substring(cut + 1);
+            }
+        }
+        return result;
+    }
 
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
