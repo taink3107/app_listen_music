@@ -1,14 +1,14 @@
-package com.example.app_music.ui.playlist;
+package com.example.app_music.ui.favorite_song;
 
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
-public class PlayListViewModel extends ViewModel {
+public class FavoriteSongModel extends ViewModel {
 
     private MutableLiveData<String> mText;
 
-    public PlayListViewModel() {
+    public FavoriteSongModel() {
         mText = new MutableLiveData<>();
         mText.setValue("This is gallery fragment");
     }

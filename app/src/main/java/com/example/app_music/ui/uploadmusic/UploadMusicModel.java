@@ -13,6 +13,8 @@ public class UploadMusicModel extends ViewModel {
         mText.setValue("This is slideshow fragment");
     }
 
+
+
     public LiveData<String> getText() {
         return mText;
     }
