@@ -25,6 +25,7 @@ public class Song implements Serializable {
     private String type_song;
     private String theme_song;
     private String lyrics;
+    private String content;
 
     public Bundle putDataToBundle() {
         Bundle bundle = new Bundle();

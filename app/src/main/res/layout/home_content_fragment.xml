@@ -1,14 +1,30 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ui.home.homecontent.HomeContentFragment"
-    android:background="#FFEB3B">
+    android:fillViewport="true"
+    android:scrollbars="none"
+    tools:context=".ui.home.homecontent.HomeContentFragment">
 
-    <TextView
+    <LinearLayout
+        android:id="@+id/ln_layout1"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Hello Home" />
+        android:orientation="vertical">
+        <fragment
+            android:name="com.example.app_music.ui.home.homecontent.banner.BannerFragment"
+            android:id="@+id/fragment_banner1"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"/>
+        <fragment
 
-</FrameLayout>
+            android:name="com.example.app_music.ui.home.homecontent.playlist.PlayListFragment"
+            android:id="@+id/fragment_playlist1"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"/>
+    </LinearLayout>
+
+
+
+</ScrollView>
