@@ -34,7 +34,7 @@ public class Step2 extends Fragment {
         Bundle bundle = getArguments();
         // button = root.findViewById(R.id.txt_displaySong1);
 
-        view = root.findViewById(R.id.img_view);
+        //view = root.findViewById(R.id.img_view);
         view.setImageResource(R.drawable.iconloved);
         if (bundle != null) {
             Song song = (Song) bundle.getSerializable("new_song");

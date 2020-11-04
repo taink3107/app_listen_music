@@ -12,19 +12,26 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical">
+
         <fragment
-            android:name="com.example.app_music.ui.home.homecontent.banner.BannerFragment"
             android:id="@+id/fragment_banner1"
+            android:name="com.example.app_music.ui.home.homecontent.banner.BannerFragment"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"/>
+            android:layout_height="wrap_content" />
+
         <fragment
 
-            android:name="com.example.app_music.ui.home.homecontent.playlist.PlayListFragment"
             android:id="@+id/fragment_playlist1"
+            android:name="com.example.app_music.ui.home.homecontent.playlist.PlayListFragment"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"/>
-    </LinearLayout>
+            android:layout_height="wrap_content" />
 
+        <fragment
+            android:id="@+id/fragment_theme1"
+            android:name="com.example.app_music.ui.home.homecontent.theme.ThemeFragment"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+    </LinearLayout>
 
 
 </ScrollView>

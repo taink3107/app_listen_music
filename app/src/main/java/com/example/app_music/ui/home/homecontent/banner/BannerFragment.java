@@ -25,7 +25,6 @@ import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Stream;
 
 import me.relex.circleindicator.CircleIndicator;
 
@@ -49,14 +48,13 @@ public class BannerFragment extends Fragment implements FireBaseHepler {
         View root = inflater.inflate(R.layout.banner_fragment, container, false);
 
         init(root);
-        DATABASE_REFERENCE.addListenerForSingleValueEvent(new ValueEventListener() {
+        DATABASE_REFERENCE_MUSIC.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 List<Song> songList = new ArrayList<>();
                 for (DataSnapshot dataSnapshot : snapshot.getChildren()) {
                     Song song = dataSnapshot.getValue(Song.class);
                     songList.add(song);
-
                 }
                 Log.i("image_URL", songList.get(0).getImage_URL());
                 bannerAdapter = new BannerAdapter(getActivity(), songList);
