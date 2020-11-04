@@ -88,7 +88,7 @@ public class Step1 extends Fragment {
         if (uriData != null) {
             Song song = new Song();
             song.processUri(getFileName(uriData));
-            song.setMp3_URI(uriData.toString());
+            song.setMp3_URL(uriData.toString());
             Bundle bundle = new Bundle();
             bundle.putSerializable("new_song", song);
             FragmentManager manager = getActivity().getSupportFragmentManager();

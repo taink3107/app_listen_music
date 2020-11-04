@@ -21,7 +21,7 @@ public class Song implements Serializable {
     private String song_name;
     private List<String> singers;
     private String image_URL;
-    private String mp3_URI;
+    private String mp3_URL;
     private String type_song;
     private String theme_song;
     private String lyrics;
