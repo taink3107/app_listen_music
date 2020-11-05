@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:gravity="center"
+    tools:context=".ui.home.homecontent.playlist.PlayListFragment">
+
+    <TextView
+        android:gravity="center"
+        android:id="@+id/title_view_playlist"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="15dp"
+        android:layout_marginBottom="15dp"
+        android:text="NHỊP ĐỘ CẢM XÚC"
+        android:textColor="#3e3b3b"
+        android:textStyle="bold"
+        android:textSize="20sp" />
+
+    <ListView
+        android:id="@+id/list_view_playlist"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/title_view_playlist" />
+
+    <TextView
+        android:text="Xem thêm playlist"
+        android:textSize="19dp"
+        android:drawablePadding="10dp"
+        android:id="@+id/txt_view_more_playlist"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/list_view_playlist"
+        android:layout_marginTop="8dp"
+        android:background="#c9c7c7"
+        android:drawableLeft="@drawable/iconmoreplaylist"
+        android:paddingLeft="5dp"
+        android:paddingTop="10dp"
+        android:paddingBottom="10dp"
+        android:textColor="#000000" />
+
+</RelativeLayout>
