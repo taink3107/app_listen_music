@@ -30,7 +30,7 @@ public class MusicMainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_music_main);
         Toolbar toolbar = findViewById(R.id.toolbar);
 
-        button = findViewById(R.id.button3);
+        //button = findViewById(R.id.button3);
 
         setSupportActionBar(toolbar);
     /*   // FloatingActionButton fab = findViewById(R.id.fab);

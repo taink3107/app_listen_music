@@ -3,32 +3,39 @@ package com.example.app_music.ui.home.playmusic;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
-import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.viewpager.widget.ViewPager;
 
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
+import android.content.BroadcastReceiver;
+import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
 import android.graphics.Color;
 import android.media.AudioManager;
 import android.media.MediaPlayer;
-import android.net.Uri;
-import android.os.AsyncTask;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.StrictMode;
 import android.util.Log;
 import android.view.View;
-import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.SeekBar;
 import android.widget.TextView;
-import android.widget.Toast;
 
+import com.example.app_music.MusicMainActivity;
 import com.example.app_music.R;
 import com.example.app_music.adapter.ViewPagerPlaySong;
+import com.example.app_music.domain.Playable;
 import com.example.app_music.domain.Song;
 import com.example.app_music.ui.Fragments.Fragment_Lyrics;
 import com.example.app_music.ui.Fragments.Fragment_Play_Music_Bar;
 import com.example.app_music.ui.Fragments.Fragment_Song_Disc;
+import com.example.app_music.ui.Fragments.Fragment_Song_Info;
+import com.example.app_music.ui.Notification.CreateNotification;
+import com.example.app_music.ui.Services.OnClearFromRecentService;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -38,7 +45,7 @@ import com.google.firebase.database.ValueEventListener;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 
-public class PlaySongActivity extends AppCompatActivity {
+public class PlaySongActivity extends AppCompatActivity implements Playable {
 
     DatabaseReference databaseReference;
     Toolbar toolbarPlaySong;
@@ -49,8 +56,13 @@ public class PlaySongActivity extends AppCompatActivity {
     public static ViewPagerPlaySong adapterMusic;
     Fragment_Song_Disc fragment_song_disc;
     Fragment_Lyrics fragment_lyrics;
+    Fragment_Song_Info fragment_song_info;
     MediaPlayer mediaPlayer;
     Song song = new Song();
+    NotificationManager notificationManager;
+
+    int position=2;
+    boolean isPlaying = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -66,11 +78,21 @@ public class PlaySongActivity extends AppCompatActivity {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 song = dataSnapshot.getValue(Song.class);
+
                 fragment_lyrics.setLyrics(song.getLyrics());
+
+                Bundle bundle = new Bundle();
+                bundle.putSerializable("songInfo",song);
+                fragment_song_info.setArguments(bundle);
+
                 adapterMusic = new ViewPagerPlaySong(getSupportFragmentManager());
+                adapterMusic.addFragment(fragment_song_info);
                 adapterMusic.addFragment(fragment_song_disc);
                 adapterMusic.addFragment(fragment_lyrics);
                 viewPagerPlaySong.setAdapter(adapterMusic);
+                viewPagerPlaySong.setCurrentItem(1);
+
+                setToolBarReturn();
                 playMusic();
                 eventClick();
             }
@@ -80,6 +102,24 @@ public class PlaySongActivity extends AppCompatActivity {
                 Log.w("error", "Failed to read value.", databaseError.toException());
             }
         });
+    }
+
+    private void CreateNotification(){
+        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.O){
+            createChannel();
+            registerReceiver(receiver,new IntentFilter("TRACKS"));
+            startService(new Intent(getBaseContext(), OnClearFromRecentService.class));
+        }
+    }
+
+    private void createChannel() {
+        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.O){
+            NotificationChannel channel = new NotificationChannel(CreateNotification.CHANNEL_ID,"noti",NotificationManager.IMPORTANCE_LOW);
+            notificationManager = getSystemService(NotificationManager.class);
+            if(notificationManager!=null){
+                notificationManager.createNotificationChannel(channel);
+            }
+        }
     }
 
     private void eventClick() {
@@ -100,11 +140,9 @@ public class PlaySongActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 if (mediaPlayer.isPlaying()) {
-                    mediaPlayer.pause();
-                    imgPlay.setImageResource(R.drawable.iconplay);
+                    onSongPause();
                 } else {
-                    mediaPlayer.start();
-                    imgPlay.setImageResource(R.drawable.iconpause);
+                    onSongPlay();
                 }
             }
         });
@@ -139,24 +177,29 @@ public class PlaySongActivity extends AppCompatActivity {
         imgRandom = findViewById(R.id.imagebuttonsuffle);
         imgRepeat = findViewById(R.id.imagebuttonrepeat);
         viewPagerPlaySong = findViewById(R.id.viewpagerplaysong);
+        fragment_song_disc = new Fragment_Song_Disc();
+        fragment_lyrics = new Fragment_Lyrics();
+        fragment_song_info = new Fragment_Song_Info();
+
+        Fragment_Play_Music_Bar fragment_play_music_bar = new Fragment_Play_Music_Bar();
+        getSupportFragmentManager().beginTransaction().add(R.id.layoutplaymusicbar, fragment_play_music_bar).commit();
+        CreateNotification();
+    }
+
+    private void setToolBarReturn(){
         setSupportActionBar(toolbarPlaySong);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         toolbarPlaySong.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                finish();
+                onBackPressed();
             }
         });
         toolbarPlaySong.setTitleTextColor(Color.WHITE);
-        fragment_song_disc = new Fragment_Song_Disc();
-        fragment_lyrics = new Fragment_Lyrics();
-
-        Fragment_Play_Music_Bar fragment_play_music_bar = new Fragment_Play_Music_Bar();
-        getSupportFragmentManager().beginTransaction().add(R.id.layoutplaymusicbar, fragment_play_music_bar).commit();
     }
 
     private void playMusic() {
-        fragment_song_disc = (Fragment_Song_Disc) adapterMusic.getItem(0);
+        fragment_song_disc = (Fragment_Song_Disc) adapterMusic.getItem(1);
         if (song != null) {
             fragment_song_disc.setCircleImageView(song.getImage_URL());
             getSupportActionBar().setTitle(song.getSong_name());
@@ -175,11 +218,13 @@ public class PlaySongActivity extends AppCompatActivity {
             } catch (IOException e) {
                 e.printStackTrace();
             }
-            imgPlay =findViewById(R.id.imagebuttonplay);
+            imgPlay = findViewById(R.id.imagebuttonplay);
             imgPlay.setImageResource(R.drawable.iconpause);
             mediaPlayer.start();
             TimeSong();
             updateTime();
+
+            CreateNotification.createNotification(PlaySongActivity.this,song,R.drawable.ic_baseline_pause_24,position,1);
         }
     }
 
@@ -202,12 +247,68 @@ public class PlaySongActivity extends AppCompatActivity {
                     mediaPlayer.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
                         @Override
                         public void onCompletion(MediaPlayer mp) {
-                            imgPlay =findViewById(R.id.imagebuttonplay);
-                            imgPlay.setImageResource(R.drawable.iconplay);
+                            onSongPause();
                         }
                     });
                 }
             }
         },300);
+    }
+
+    BroadcastReceiver receiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            String action = intent.getExtras().getString("actionname");
+            switch (action){
+                case CreateNotification.ACTION_PRE:
+                    onSongPre();
+                    break;
+                case CreateNotification.ACTION_PLAY:
+                    if(isPlaying){
+                        onSongPause();
+                    }else{
+                        onSongPlay();
+                    }
+                    break;
+                case CreateNotification.ACTION_NEXT:
+                    onSongNext();
+                    break;
+            }
+        }
+    };
+
+    @Override
+    public void onSongPre() {
+        position--;
+        CreateNotification.createNotification(PlaySongActivity.this,song,R.drawable.ic_baseline_pause_24,position,1);
+    }
+
+    @Override
+    public void onSongPlay() {
+        CreateNotification.createNotification(PlaySongActivity.this,song,R.drawable.ic_baseline_pause_24,position,1);
+        mediaPlayer.start();
+        imgPlay = findViewById(R.id.imagebuttonplay);
+        imgPlay.setImageResource(R.drawable.iconpause);
+        isPlaying=true;
+    }
+
+    @Override
+    public void onSongPause() {
+        CreateNotification.createNotification(PlaySongActivity.this,song,R.drawable.ic_baseline_play_arrow_24,position,1);
+        mediaPlayer.pause();
+        imgPlay = findViewById(R.id.imagebuttonplay);
+        imgPlay.setImageResource(R.drawable.iconplay);
+        isPlaying=false;
+    }
+
+    @Override
+    public void onSongNext() {
+        CreateNotification.createNotification(PlaySongActivity.this,song,R.drawable.ic_baseline_pause_24,position,1);
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        CreateNotification();
     }
 }

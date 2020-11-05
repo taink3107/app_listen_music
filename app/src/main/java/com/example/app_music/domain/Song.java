@@ -35,6 +35,17 @@ public class Song implements Serializable {
         return bundle;
     }
 
+//    public void processUri(String domain) {
+//        String[] temp1 = domain.split("-");
+//        this.setSong_name(temp1[0]);
+//        if (temp1[1].contains("&")) {
+//            this.setSingers(Arrays.asList(temp1[1].split("&")));
+//        } else {
+//            this.setSingers(Arrays.asList(temp1[1]));
+//        }
+//
+//    }
+
  /*   public void processUri(String domain) {
         String[] temp1 = domain.split("-");
         this.setSong_name(temp1[0]);
