@@ -15,4 +15,5 @@
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="upload_music">Click to select music</string>
     <string name="next">NEXT</string>
+    <string name="input_this_song_s_lyrics_here">Input this song\'s lyrics here</string>
 </resources>
