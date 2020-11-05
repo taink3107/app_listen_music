@@ -25,6 +25,7 @@ public class Song implements Serializable {
     private String type_song;
     private String theme_song;
     private String lyrics;
+    private String content;
 
     public Bundle putDataToBundle() {
         Bundle bundle = new Bundle();
@@ -45,4 +46,26 @@ public class Song implements Serializable {
 //
 //    }
 
+ /*   public void processUri(String domain) {
+        String[] temp1 = domain.split("-");
+        this.setSong_name(temp1[0]);
+        if (temp1[1].contains("&")) {
+            this.setSingers(Arrays.asList(temp1[1].split("&")));
+        } else {
+            this.setSingers(Arrays.asList(temp1[1]));
+        }*/
+
+    @Override
+    public String toString() {
+        return "Song{" +
+                "song_name='" + song_name + '\'' +
+                ", singers='" + singers + '\'' +
+                ", image_URL='" + image_URL + '\'' +
+                ", mp3_URL='" + mp3_URL + '\'' +
+                ", type_song='" + type_song + '\'' +
+                ", theme_song='" + theme_song + '\'' +
+                ", lyrics='" + lyrics + '\'' +
+                ", content='" + content + '\'' +
+                '}';
+    }
 }
