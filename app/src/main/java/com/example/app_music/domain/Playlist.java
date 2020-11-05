@@ -8,6 +8,8 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Data
 public class Playlist {
+    private String id;
     private String name_playlist;
     private String img_playlist_URL;
+
 }

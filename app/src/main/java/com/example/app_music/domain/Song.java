@@ -19,7 +19,7 @@ import lombok.Setter;
 @AllArgsConstructor
 public class Song implements Serializable {
     private String song_name;
-    private List<String> singers;
+    private String singers;
     private String image_URL;
     private String mp3_URL;
     private String type_song;
@@ -35,15 +35,26 @@ public class Song implements Serializable {
         return bundle;
     }
 
-    public void processUri(String domain) {
+ /*   public void processUri(String domain) {
         String[] temp1 = domain.split("-");
         this.setSong_name(temp1[0]);
         if (temp1[1].contains("&")) {
             this.setSingers(Arrays.asList(temp1[1].split("&")));
         } else {
             this.setSingers(Arrays.asList(temp1[1]));
-        }
+        }*/
 
+    @Override
+    public String toString() {
+        return "Song{" +
+                "song_name='" + song_name + '\'' +
+                ", singers='" + singers + '\'' +
+                ", image_URL='" + image_URL + '\'' +
+                ", mp3_URL='" + mp3_URL + '\'' +
+                ", type_song='" + type_song + '\'' +
+                ", theme_song='" + theme_song + '\'' +
+                ", lyrics='" + lyrics + '\'' +
+                ", content='" + content + '\'' +
+                '}';
     }
-
 }

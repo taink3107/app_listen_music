@@ -5,7 +5,6 @@ import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.lifecycle.ViewModelProviders;
 
-import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
 import android.net.Uri;
@@ -21,15 +20,12 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.example.app_music.R;
 import com.example.app_music.domain.Song;
 import com.example.app_music.ui.uploadmusic.step2.Step2;
-
-import java.util.Arrays;
 
 public class Step1 extends Fragment {
 
@@ -50,7 +46,7 @@ public class Step1 extends Fragment {
 
         View root = inflater.inflate(R.layout.step1_fragment, container, false);
         imageView = root.findViewById(R.id.img_upload);
-        button = root.findViewById(R.id.btnNext);
+        button = root.findViewById(R.id.btnNext_step1);
         imageView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -87,10 +83,11 @@ public class Step1 extends Fragment {
     public void sendUri() {
         if (uriData != null) {
             Song song = new Song();
-            song.processUri(getFileName(uriData));
+            //song.processUri(getFileName(uriData));
             song.setMp3_URL(uriData.toString());
             Bundle bundle = new Bundle();
             bundle.putSerializable("new_song", song);
+
             FragmentManager manager = getActivity().getSupportFragmentManager();
             FragmentTransaction transaction = manager.beginTransaction();
             Step2 step2 = new Step2();
