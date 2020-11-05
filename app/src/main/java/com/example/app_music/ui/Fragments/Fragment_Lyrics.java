@@ -32,8 +32,18 @@ public class Fragment_Lyrics extends Fragment {
         return view;
     }
 
+    public String formatLyrics(String lyrics){
+        StringBuilder builder = new StringBuilder(lyrics);
+        for (int i = 0; i < lyrics.length(); i++) {
+            if(lyrics.charAt(i) == '|'){
+                builder.setCharAt(i,'\n');
+            }
+        }
+        return builder.toString();
+    }
+
     public String setLyrics(String str){
-        lyrics = str;
+        lyrics = formatLyrics(str);
         return lyrics;
     }
 
