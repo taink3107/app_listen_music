@@ -68,4 +68,12 @@ public class Song implements Serializable {
                 ", content='" + content + '\'' +
                 '}';
     }
+
+   /* public String getSingers() {
+        if(singers.contains(",")){
+           String temp = singers.replace(","," ft ");
+            return temp;
+        }
+        return singers;
+    }*/
 }
