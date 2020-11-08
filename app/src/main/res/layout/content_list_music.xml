@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_margin="5dp"
+    android:elevation="5dp">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:padding="10dp">
+
+        <TextView
+            android:id="@+id/txt_list_music_index"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="15dp"
+            android:text="1"
+            android:textSize="20sp" />
+
+        <TextView
+
+            android:id="@+id/txt_list_music_song"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_toRightOf="@id/txt_list_music_index"
+            android:ellipsize="middle"
+            android:maxWidth="250dp"
+            android:singleLine="true"
+            android:text="Tên bài hát"
+            android:textColor="#030303"
+            android:textSize="20sp" />
+
+        <TextView
+            android:id="@+id/txt_name_singer_list"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/txt_list_music_song"
+            android:layout_toRightOf="@id/txt_list_music_index"
+            android:ellipsize="middle"
+            android:singleLine="true"
+            android:text="Ca sĩ"
+            android:textColor="#979797"
+            android:textSize="20sp" />
+
+        <ImageView
+            android:id="@+id/img_view_list_music_love"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:layout_margin="5dp"
+            android:src="@drawable/iconlove" />
+    </RelativeLayout>
+</androidx.cardview.widget.CardView>

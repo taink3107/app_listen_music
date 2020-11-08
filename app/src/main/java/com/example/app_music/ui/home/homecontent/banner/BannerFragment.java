@@ -51,6 +51,7 @@ public class BannerFragment extends Fragment implements FireBaseHepler {
         DATABASE_REFERENCE_MUSIC.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
+                currentItem = 0;
                 List<Song> songList = new ArrayList<>();
                 for (DataSnapshot dataSnapshot : snapshot.getChildren()) {
                     Song song = dataSnapshot.getValue(Song.class);
