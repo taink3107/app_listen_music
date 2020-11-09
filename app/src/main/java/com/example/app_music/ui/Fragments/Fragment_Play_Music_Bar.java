@@ -27,8 +27,7 @@ public class Fragment_Play_Music_Bar extends Fragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
-        View root = inflater.inflate(R.layout.fragment__play__music__bar_fragment, container, false);
-        return root;
+        return inflater.inflate(R.layout.fragment__play__music__bar_fragment, container, false);
     }
 
     @Override

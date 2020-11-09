@@ -2,11 +2,10 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     package="com.example.app_music"
-    tools:ignore="NamespaceTypo">
-
-
+    tools:ignore="NamespaceTypo"
+    >
+    package="com.example.app_music">
     <uses-permission android:name="android.permission.INTERNET" />
-
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
@@ -14,17 +13,7 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <!--        <uses-library
-                    android:name="com.google.android.wearable"
-                    android:required="true" />
 
-                &lt;!&ndash;
-                       Set to true if your app is Standalone, that is, it does not require the handheld
-                       app to run.
-                &ndash;&gt;
-                <meta-data
-                    android:name="com.google.android.wearable.standalone"
-                    android:value="true" />-->
         <activity android:name=".component.ListThemeMusicActivity" />
         <activity android:name=".component.ListPlayListActivity" />
         <activity
@@ -43,10 +32,14 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity android:name=".ui.home.playmusic.PlaySongActivity"
+            android:usesCleartextTraffic="true"
+            android:launchMode="singleTask"
+            >
+        </activity>
 
-        <service android:name=".ui.Services.OnClearFromRecentService" />
-
-        <receiver android:name=".ui.Services.NotificationActionService" />
+        <service android:name=".ui.Services.OnClearFromRecentService"/>
+        <receiver android:name=".ui.Services.NotificationActionService"/>
     </application>
 
 </manifest>
