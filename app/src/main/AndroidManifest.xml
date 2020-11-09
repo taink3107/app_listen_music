@@ -14,25 +14,25 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-<!--        <uses-library
-            android:name="com.google.android.wearable"
-            android:required="true" />
+        <!--        <uses-library
+                    android:name="com.google.android.wearable"
+                    android:required="true" />
 
-        &lt;!&ndash;
-               Set to true if your app is Standalone, that is, it does not require the handheld
-               app to run.
-        &ndash;&gt;
-        <meta-data
-            android:name="com.google.android.wearable.standalone"
-            android:value="true" />-->
-
+                &lt;!&ndash;
+                       Set to true if your app is Standalone, that is, it does not require the handheld
+                       app to run.
+                &ndash;&gt;
+                <meta-data
+                    android:name="com.google.android.wearable.standalone"
+                    android:value="true" />-->
+        <activity android:name=".component.ListThemeMusicActivity" />
+        <activity android:name=".component.ListPlayListActivity" />
         <activity
             android:name=".component.ListMusicActivity"
-            android:label="@string/title_activity_list_music">
-        </activity>
+            android:label="@string/title_activity_list_music" />
         <activity
             android:name=".ui.home.playmusic.PlaySongActivity"
-            android:usesCleartextTraffic="true"></activity>
+            android:usesCleartextTraffic="true" />
         <activity
             android:name=".MusicMainActivity"
             android:label="@string/title_activity_music_main"

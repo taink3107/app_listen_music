@@ -1,5 +1,6 @@
 package com.example.app_music.ui.home.homecontent.theme;
 
+import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 
@@ -18,6 +19,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.example.app_music.R;
+import com.example.app_music.component.ListThemeMusicActivity;
 import com.example.app_music.domain.ThemeSong;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -135,6 +137,17 @@ public class ThemeFragment extends Fragment {
 
             }
         });
+        eventSeeMore();
         return view;
+    }
+
+    private void eventSeeMore() {
+        textView_view_more.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getActivity(), ListThemeMusicActivity.class);
+                startActivity(intent);
+            }
+        });
     }
 }
