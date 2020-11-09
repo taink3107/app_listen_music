@@ -1,14 +1,8 @@
 package com.example.app_music;
 
-import android.content.Intent;
 import android.os.Bundle;
-import android.view.View;
 import android.view.Menu;
-import android.widget.Button;
 
-import com.example.app_music.ui.home.playmusic.PlaySongActivity;
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
-import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.navigation.NavigationView;
 
 import androidx.navigation.NavController;
@@ -19,10 +13,9 @@ import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
-public class MusicMainActivity extends AppCompatActivity {
+public class MusicMainActivity extends AppCompatActivity{
 
     private AppBarConfiguration mAppBarConfiguration;
-    Button button;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -53,7 +46,10 @@ public class MusicMainActivity extends AppCompatActivity {
         NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment);
         NavigationUI.setupActionBarWithNavController(this, navController, mAppBarConfiguration);
         NavigationUI.setupWithNavController(navigationView, navController);
+
+
     }
+
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -69,8 +65,4 @@ public class MusicMainActivity extends AppCompatActivity {
                 || super.onSupportNavigateUp();
     }
 
-    public void playMusic(View view) {
-        Intent intent = new Intent(this, PlaySongActivity.class);
-        startActivity(intent);
-    }
 }

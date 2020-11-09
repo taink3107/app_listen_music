@@ -1,7 +1,11 @@
 package com.example.app_music.ui.Notification;
 
+import android.app.ActivityManager;
 import android.app.Notification;
+import android.app.NotificationManager;
 import android.app.PendingIntent;
+import android.app.TaskStackBuilder;
+import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -15,6 +19,7 @@ import androidx.core.app.NotificationManagerCompat;
 import com.example.app_music.R;
 import com.example.app_music.domain.Song;
 import com.example.app_music.ui.Services.NotificationActionService;
+import com.example.app_music.ui.home.playmusic.PlaySongActivity;
 
 public class CreateNotification {
     public static final String CHANNEL_ID="channel1";
@@ -56,6 +61,9 @@ public class CreateNotification {
                 drw_next = R.drawable.ic_baseline_skip_next_24;
             }
 
+            Intent resultIntent = new Intent(context, PlaySongActivity.class);
+            PendingIntent resultPendingIntent = PendingIntent.getActivity(context,0,resultIntent,PendingIntent.FLAG_UPDATE_CURRENT);;
+
             //create notification
             notification = new NotificationCompat.Builder(context,CHANNEL_ID)
                     .setSmallIcon(R.drawable.ic_baseline_music_note_24)
@@ -70,8 +78,8 @@ public class CreateNotification {
                         .setShowActionsInCompactView(0,1,2)
                         .setMediaSession(mediaSessionCompat.getSessionToken()))
                     .setPriority(NotificationCompat.PRIORITY_LOW)
+                    .setContentIntent(resultPendingIntent)
                     .build();
-
             notificationManagerCompat.notify(1,notification);
         }
     }
