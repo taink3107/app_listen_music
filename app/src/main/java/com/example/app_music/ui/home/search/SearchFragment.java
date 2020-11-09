@@ -2,6 +2,7 @@ package com.example.app_music.ui.home.search;
 
 import androidx.lifecycle.ViewModelProviders;
 
+import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -15,6 +16,7 @@ import android.widget.Button;
 
 import com.example.app_music.R;
 import com.example.app_music.domain.Song;
+import com.example.app_music.ui.home.playmusic.PlaySongActivity;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -40,6 +42,14 @@ public class SearchFragment extends Fragment {
                              @Nullable Bundle savedInstanceState) {
 
         View root = inflater.inflate(R.layout.search_fragment, container, false);
+        button = root.findViewById(R.id.button);
+        button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getActivity(), PlaySongActivity.class);
+                startActivity(intent);
+            }
+        });
         return root;
     }
 

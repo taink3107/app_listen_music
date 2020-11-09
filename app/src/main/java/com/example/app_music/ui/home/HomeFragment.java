@@ -1,9 +1,11 @@
 package com.example.app_music.ui.home;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 
 
 import androidx.annotation.NonNull;
@@ -16,6 +18,7 @@ import androidx.viewpager.widget.ViewPager;
 import com.example.app_music.R;
 import com.example.app_music.adapter.MainViewPageAdapter;
 import com.example.app_music.ui.home.homecontent.HomeContentFragment;
+import com.example.app_music.ui.home.playmusic.PlaySongActivity;
 import com.example.app_music.ui.home.search.SearchFragment;
 import com.google.android.material.tabs.TabLayout;
 
@@ -24,11 +27,13 @@ public class HomeFragment extends Fragment {
     private TabLayout tabLayout;
     private ViewPager viewPager;
     private HomeViewModel viewModel;
+
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
         View root = inflater.inflate(R.layout.fragment_home, container, false);
         tabLayout = root.findViewById(R.id.myTabLayout);
         viewPager = root.findViewById(R.id.myViewPager);
+
 
         viewModel = ViewModelProviders.of(this).get(HomeViewModel.class);
         viewModel.setDataAdapter(getChildFragmentManager());
@@ -41,6 +46,8 @@ public class HomeFragment extends Fragment {
                 tabLayout.getTabAt(1).setIcon(R.drawable.iconsearch);
             }
         });
+
+
         return root;
     }
 

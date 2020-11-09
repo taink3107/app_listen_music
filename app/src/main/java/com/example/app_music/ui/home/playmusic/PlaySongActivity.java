@@ -3,7 +3,6 @@ package com.example.app_music.ui.home.playmusic;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
-import androidx.fragment.app.FragmentTransaction;
 import androidx.viewpager.widget.ViewPager;
 
 import android.app.NotificationChannel;
@@ -41,7 +40,6 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
-
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 
@@ -61,8 +59,9 @@ public class PlaySongActivity extends AppCompatActivity implements Playable {
     Song song = new Song();
     NotificationManager notificationManager;
 
-    int position=2;
-    boolean isPlaying = false;
+    int position = 2;
+    public static boolean isPlaying = false;
+    public static boolean isPlaySongActivity = true;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -82,7 +81,7 @@ public class PlaySongActivity extends AppCompatActivity implements Playable {
                 fragment_lyrics.setLyrics(song.getLyrics());
 
                 Bundle bundle = new Bundle();
-                bundle.putSerializable("songInfo",song);
+                bundle.putSerializable("songInfo", song);
                 fragment_song_info.setArguments(bundle);
 
                 adapterMusic = new ViewPagerPlaySong(getSupportFragmentManager());
@@ -92,7 +91,6 @@ public class PlaySongActivity extends AppCompatActivity implements Playable {
                 viewPagerPlaySong.setAdapter(adapterMusic);
                 viewPagerPlaySong.setCurrentItem(1);
 
-                setToolBarReturn();
                 playMusic();
                 eventClick();
             }
@@ -104,19 +102,20 @@ public class PlaySongActivity extends AppCompatActivity implements Playable {
         });
     }
 
-    private void CreateNotification(){
-        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.O){
+    private void CreateNotification() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             createChannel();
-            registerReceiver(receiver,new IntentFilter("TRACKS"));
+            registerReceiver(receiver, new IntentFilter("TRACKS"));
             startService(new Intent(getBaseContext(), OnClearFromRecentService.class));
         }
+        registerReceiver(receiver, new IntentFilter("EVENTS"));
     }
 
     private void createChannel() {
-        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.O){
-            NotificationChannel channel = new NotificationChannel(CreateNotification.CHANNEL_ID,"noti",NotificationManager.IMPORTANCE_LOW);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            NotificationChannel channel = new NotificationChannel(CreateNotification.CHANNEL_ID, "noti", NotificationManager.IMPORTANCE_LOW);
             notificationManager = getSystemService(NotificationManager.class);
-            if(notificationManager!=null){
+            if (notificationManager != null) {
                 notificationManager.createNotificationChannel(channel);
             }
         }
@@ -149,7 +148,7 @@ public class PlaySongActivity extends AppCompatActivity implements Playable {
         sktTime.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-                if(fromUser){
+                if (fromUser) {
                     mediaPlayer.seekTo(progress);
                 }
             }
@@ -180,13 +179,6 @@ public class PlaySongActivity extends AppCompatActivity implements Playable {
         fragment_song_disc = new Fragment_Song_Disc();
         fragment_lyrics = new Fragment_Lyrics();
         fragment_song_info = new Fragment_Song_Info();
-
-        Fragment_Play_Music_Bar fragment_play_music_bar = new Fragment_Play_Music_Bar();
-        getSupportFragmentManager().beginTransaction().add(R.id.layoutplaymusicbar, fragment_play_music_bar).commit();
-        CreateNotification();
-    }
-
-    private void setToolBarReturn(){
         setSupportActionBar(toolbarPlaySong);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         toolbarPlaySong.setNavigationOnClickListener(new View.OnClickListener() {
@@ -196,6 +188,26 @@ public class PlaySongActivity extends AppCompatActivity implements Playable {
             }
         });
         toolbarPlaySong.setTitleTextColor(Color.WHITE);
+
+        Fragment_Play_Music_Bar fragment_play_music_bar = new Fragment_Play_Music_Bar();
+        getSupportFragmentManager().beginTransaction().add(R.id.layoutplaymusicbar, fragment_play_music_bar).commit();
+
+        CreateNotification();
+        if (!isPlaySongActivity) {
+            imgPlay = findViewById(R.id.imagebuttonplay);
+            eventClick();
+            isPlaySongActivity = true;
+        }
+    }
+
+    @Override
+    public void onBackPressed() {
+        Intent intent = new Intent(PlaySongActivity.this, MusicMainActivity.class);
+        intent.addCategory(Intent.CATEGORY_HOME);
+        intent.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
+        isPlaySongActivity = false;
+        CreateNotification();
+        startActivity(intent);
     }
 
     private void playMusic() {
@@ -224,7 +236,7 @@ public class PlaySongActivity extends AppCompatActivity implements Playable {
             TimeSong();
             updateTime();
 
-            CreateNotification.createNotification(PlaySongActivity.this,song,R.drawable.ic_baseline_pause_24,position,1);
+            CreateNotification.createNotification(PlaySongActivity.this, song, R.drawable.ic_baseline_pause_24, position, 1);
         }
     }
 
@@ -234,16 +246,16 @@ public class PlaySongActivity extends AppCompatActivity implements Playable {
         sktTime.setMax(mediaPlayer.getDuration());
     }
 
-    private void updateTime(){
+    private void updateTime() {
         final Handler handler = new Handler();
         handler.postDelayed(new Runnable() {
             @Override
             public void run() {
-                if(mediaPlayer!=null){
+                if (mediaPlayer != null) {
                     sktTime.setProgress(mediaPlayer.getCurrentPosition());
                     SimpleDateFormat simpleDateFormat = new SimpleDateFormat("mm:ss");
                     txtTimeSong.setText(simpleDateFormat.format(mediaPlayer.getCurrentPosition()));
-                    handler.postDelayed(this,300);
+                    handler.postDelayed(this, 300);
                     mediaPlayer.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
                         @Override
                         public void onCompletion(MediaPlayer mp) {
@@ -252,21 +264,21 @@ public class PlaySongActivity extends AppCompatActivity implements Playable {
                     });
                 }
             }
-        },300);
+        }, 300);
     }
 
     BroadcastReceiver receiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
             String action = intent.getExtras().getString("actionname");
-            switch (action){
+            switch (action) {
                 case CreateNotification.ACTION_PRE:
                     onSongPre();
                     break;
                 case CreateNotification.ACTION_PLAY:
-                    if(isPlaying){
+                    if (isPlaying) {
                         onSongPause();
-                    }else{
+                    } else {
                         onSongPlay();
                     }
                     break;
@@ -280,35 +292,34 @@ public class PlaySongActivity extends AppCompatActivity implements Playable {
     @Override
     public void onSongPre() {
         position--;
-        CreateNotification.createNotification(PlaySongActivity.this,song,R.drawable.ic_baseline_pause_24,position,1);
+        CreateNotification.createNotification(PlaySongActivity.this, song, R.drawable.ic_baseline_pause_24, position, 1);
     }
 
     @Override
     public void onSongPlay() {
-        CreateNotification.createNotification(PlaySongActivity.this,song,R.drawable.ic_baseline_pause_24,position,1);
+        CreateNotification.createNotification(PlaySongActivity.this, song, R.drawable.ic_baseline_pause_24, position, 1);
         mediaPlayer.start();
         imgPlay = findViewById(R.id.imagebuttonplay);
         imgPlay.setImageResource(R.drawable.iconpause);
-        isPlaying=true;
+        isPlaying = true;
     }
 
     @Override
     public void onSongPause() {
-        CreateNotification.createNotification(PlaySongActivity.this,song,R.drawable.ic_baseline_play_arrow_24,position,1);
+        CreateNotification.createNotification(PlaySongActivity.this, song, R.drawable.ic_baseline_play_arrow_24, position, 1);
         mediaPlayer.pause();
         imgPlay = findViewById(R.id.imagebuttonplay);
         imgPlay.setImageResource(R.drawable.iconplay);
-        isPlaying=false;
+        isPlaying = false;
     }
 
     @Override
     public void onSongNext() {
-        CreateNotification.createNotification(PlaySongActivity.this,song,R.drawable.ic_baseline_pause_24,position,1);
+        CreateNotification.createNotification(PlaySongActivity.this, song, R.drawable.ic_baseline_pause_24, position, 1);
     }
 
     @Override
-    protected void onDestroy() {
-        super.onDestroy();
-        CreateNotification();
+    protected void onResume() {
+        super.onResume();
     }
 }
